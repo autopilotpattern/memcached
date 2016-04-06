@@ -7,21 +7,19 @@ RUN apt-get update \
 		netcat \
     curl
 
-COPY containerbuddy/* /opt/containerbuddy/
+COPY containerbuddy/* /etc/
 
 # Install Containerbuddy
 # Releases at https://github.com/joyent/containerbuddy/releases
-ENV CONTAINERBUDDY_VERSION 0.1.1
-ENV CONTAINERBUDDY_SHA1 3163e89d4c95b464b174ba31733946ca247e068e
-RUN curl --retry 7 -Lso /tmp/containerbuddy.tar.gz "https://github.com/joyent/containerbuddy/releases/download/${CONTAINERBUDDY_VERSION}/containerbuddy-${CONTAINERBUDDY_VERSION}.tar.gz" \
-    && echo "${CONTAINERBUDDY_SHA1}  /tmp/containerbuddy.tar.gz" | sha1sum -c \
-    && tar zxf /tmp/containerbuddy.tar.gz -C /opt/containerbuddy \
+ENV CONTAINERBUDDY_VER 1.3.0
+ENV CONTAINERBUDDY file:///etc/containerbuddy.json
+RUN export CONTAINERBUDDY_CHECKSUM=c25d3af30a822f7178b671007dcd013998d9fae1 \
+    && curl -Lso /tmp/containerbuddy.tar.gz \
+         "https://github.com/joyent/containerbuddy/releases/download/${CONTAINERBUDDY_VER}/containerbuddy-${CONTAINERBUDDY_VER}.tar.gz" \
+    && echo "${CONTAINERBUDDY_CHECKSUM}  /tmp/containerbuddy.tar.gz" | sha1sum -c \
+    && tar zxf /tmp/containerbuddy.tar.gz -C /usr/local/bin \
     && rm /tmp/containerbuddy.tar.gz
 
-
-
-COPY docker-entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
 USER memcache
 CMD ["/opt/containerbuddy/containerbuddy", \
     "memcached", \
