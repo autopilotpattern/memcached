@@ -1,7 +1,6 @@
 FROM memcached:latest
 
 USER root
-# install python for entrypoint
 RUN apt-get update \
     && apt-get install -y \
 		netcat \
@@ -20,8 +19,10 @@ RUN export CONTAINERBUDDY_CHECKSUM=c25d3af30a822f7178b671007dcd013998d9fae1 \
     && tar zxf /tmp/containerbuddy.tar.gz -C /usr/local/bin \
     && rm /tmp/containerbuddy.tar.gz
 
+# reset entrypoint from base image
+ENTRYPOINT []
 USER memcache
-CMD ["/opt/containerbuddy/containerbuddy", \
+CMD ["/usr/local/bin/containerbuddy", \
     "memcached", \
 		"-l", \
 		"0.0.0.0"]
