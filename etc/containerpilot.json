@@ -1,19 +1,9 @@
 {
-  "consul": "{{.CONSUL}}:8500",
+  "consul": "{{ .CONSUL }}:8500",
   "services": [
     {
       "name": "memcached",
       "port": 11211,
-      "interfaces": [
-        "eth0",
-        "eth1[1]",
-        "192.168.0.0/16",
-        "2001:db8::/64",
-        "eth2:inet",
-        "eth2:inet6",
-        "inet",
-        "inet6"
-      ],
       "health": "nc -vz localhost 11211",
       "poll": 10,
       "ttl": 25
