@@ -3,26 +3,27 @@ FROM memcached:latest
 USER root
 RUN apt-get update \
     && apt-get install -y \
-		netcat \
-    curl
+        netcat \
+        curl
 
-COPY containerbuddy/* /etc/
+# Install ContainerPilot
+# Releases at https://github.com/joyent/containerpilot/releases
+ENV CONTAINERPILOT_VER 2.0.1
+RUN export CONTAINERPILOT_CHECKSUM=a4dd6bc001c82210b5c33ec2aa82d7ce83245154 \
+    && curl -Lso /tmp/containerpilot.tar.gz \
+        "https://github.com/joyent/containerpilot/releases/download/${CONTAINERPILOT_VER}/containerpilot-${CONTAINERPILOT_VER}.tar.gz" \
+    && echo "${CONTAINERPILOT_CHECKSUM}  /tmp/containerpilot.tar.gz" | sha1sum -c \
+    && tar zxf /tmp/containerpilot.tar.gz -C /usr/local/bin \
+    && rm /tmp/containerpilot.tar.gz
 
-# Install Containerbuddy
-# Releases at https://github.com/joyent/containerbuddy/releases
-ENV CONTAINERBUDDY_VER 1.3.0
-ENV CONTAINERBUDDY file:///etc/containerbuddy.json
-RUN export CONTAINERBUDDY_CHECKSUM=c25d3af30a822f7178b671007dcd013998d9fae1 \
-    && curl -Lso /tmp/containerbuddy.tar.gz \
-         "https://github.com/joyent/containerbuddy/releases/download/${CONTAINERBUDDY_VER}/containerbuddy-${CONTAINERBUDDY_VER}.tar.gz" \
-    && echo "${CONTAINERBUDDY_CHECKSUM}  /tmp/containerbuddy.tar.gz" | sha1sum -c \
-    && tar zxf /tmp/containerbuddy.tar.gz -C /usr/local/bin \
-    && rm /tmp/containerbuddy.tar.gz
+# Add ContainerPilot configuration
+COPY etc/containerpilot.json /etc/containerpilot.json
+ENV CONTAINERPILOT file:///etc/containerpilot.json
 
 # reset entrypoint from base image
 ENTRYPOINT []
 USER memcache
-CMD ["/usr/local/bin/containerbuddy", \
+CMD ["/usr/local/bin/containerpilot", \
     "memcached", \
-		"-l", \
-		"0.0.0.0"]
+        "-l", \
+        "0.0.0.0"]
