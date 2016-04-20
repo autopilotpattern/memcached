@@ -7,7 +7,7 @@
 [![Join the chat at https://gitter.im/autopilotpattern/general](https://badges.gitter.im/autopilotpattern/general.svg)](https://gitter.im/autopilotpattern/general)
 
 ### Usage
-Include this image in your Docker Compose project, query Consul for it's IP address and use it in your configurations, easily done via Consul-Template. The default ContainerPilot configuration talks to Consul and assumes the IP address to access consule is passed to the container in an envrionment varible, $CONSUL
+Include this image in your Docker Compose project, query Consul for it's IP address and use it in your configurations, easily done via [Consul-Template](https://github.com/hashicorp/consul-template). The default ContainerPilot configuration talks to Consul and assumes the IP address to access consule is passed to the container in an envrionment varible, $CONSUL
 
 Consider this example consul template from the [AutoPilot Wordpress](https://github.com/autopilotpattern/wordpress) project
 
