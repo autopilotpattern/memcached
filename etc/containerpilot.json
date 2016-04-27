@@ -1,0 +1,12 @@
+{
+  "consul": "{{ .CONSUL }}:8500",
+  "services": [
+    {
+      "name": "memcached",
+      "port": 11211,
+      "health": "nc -vz localhost 11211",
+      "poll": 10,
+      "ttl": 25
+    }
+  ]
+}
