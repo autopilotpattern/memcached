@@ -22,10 +22,9 @@ RUN apk update && apk add \
     netcat-openbsd \
     && rm -rf /var/cache/apk/*
 
-# Add Containerpilot and its configuration
+# Add ContainerPilot and its configuration
 # Releases at https://github.com/joyent/containerpilot/releases
 ENV CONTAINERPILOT_VER 2.3.0
-COPY etc/containerpilot.json /etc/containerpilot.json
 ENV CONTAINERPILOT file:///etc/containerpilot.json
 
 RUN export CONTAINERPILOT_CHECKSUM=ec9dbedaca9f4a7a50762f50768cbc42879c7208 \
@@ -34,6 +33,10 @@ RUN export CONTAINERPILOT_CHECKSUM=ec9dbedaca9f4a7a50762f50768cbc42879c7208 \
     && echo "${CONTAINERPILOT_CHECKSUM}  /tmp/containerpilot.tar.gz" | sha1sum -c \
     && tar zxf /tmp/containerpilot.tar.gz -C /usr/local/bin \
     && rm /tmp/containerpilot.tar.gz
+
+# The our helper/glue scripts and configuration for this specific app
+COPY bin /usr/local/bin
+COPY etc /etc
 
 # Install Consul
 # Releases at https://releases.hashicorp.com/consul
@@ -44,6 +47,12 @@ RUN export CONSUL_VERSION=0.6.4 \
     && unzip /tmp/consul -d /usr/local/bin \
     && rm /tmp/consul.zip \
     && mkdir /config
+
+# Create empty directories for Consul config and data
+RUN mkdir -p /etc/consul \
+    && chown -R memcache /etc/consul \
+    && mkdir -p /var/lib/consul \
+    && chown -R memcache /var/lib/consul
 
 # Reset entrypoint from base image
 ENTRYPOINT []
