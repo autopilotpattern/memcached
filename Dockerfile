@@ -1,10 +1,26 @@
-FROM memcached:latest
+FROM memcached:1.4-alpine
 
+# Build-time metadata as defined at http://label-schema.org
+# with added usage described in https://microbadger.com/#/labels
+ARG BUILD_DATE
+ARG VCS_REF
+LABEL org.label-schema.build-date=$BUILD_DATE \
+    org.label-schema.docker.dockerfile="/Dockerfile" \
+    org.label-schema.name="Autopilot Pattern Memcached" \
+    org.label-schema.url="https://github.com/autopilotpattern/memcached" \
+    org.label-schema.vcs-ref=$VCS_REF \
+    org.label-schema.vcs-type="Git" \
+    org.label-schema.vcs-url="https://github.com/autopilotpattern/memcached"
+
+# Reset to root user to do some installs
 USER root
-RUN apt-get update \
-    && apt-get install -y \
-        netcat \
-        curl
+
+# Install packages
+RUN apk update && apk add \
+    bash \
+    curl \
+    netcat-openbsd \
+    && rm -rf /var/cache/apk/*
 
 # Add Containerpilot and its configuration
 # Releases at https://github.com/joyent/containerpilot/releases
@@ -29,8 +45,10 @@ RUN export CONSUL_VERSION=0.6.4 \
     && rm /tmp/consul.zip \
     && mkdir /config
 
-# reset entrypoint from base image
+# Reset entrypoint from base image
 ENTRYPOINT []
+
+# Reset to memcache user to, um, run memcache
 USER memcache
 CMD ["/usr/local/bin/containerpilot", \
     "memcached", \
