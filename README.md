@@ -3,8 +3,8 @@
 
 [![DockerPulls](https://img.shields.io/docker/pulls/autopilotpattern/memcached.svg)](https://registry.hub.docker.com/u/autopilotpattern/memcached/)
 [![DockerStars](https://img.shields.io/docker/stars/autopilotpattern/memcached.svg)](https://registry.hub.docker.com/u/autopilotpattern/memcached/)
-[![ImageLayers](https://badge.imagelayers.io/autopilotpattern/memcached:latest.svg)](https://imagelayers.io/?images=autopilotpattern/memcached:latest)
-[![Join the chat at https://gitter.im/autopilotpattern/general](https://badges.gitter.im/autopilotpattern/general.svg)](https://gitter.im/autopilotpattern/general)
+[![MicroBadger version](https://images.microbadger.com/badges/version/autopilotpattern/memcached.svg)](http://microbadger.com/#/images/autopilotpattern/memcached)
+[![MicroBadger commit](https://images.microbadger.com/badges/commit/autopilotpattern/memcached.svg)](http://microbadger.com/#/images/autopilotpattern/memcached)
 
 ### Usage
 Include this image in your Docker Compose project, query Consul for it's IP address and use it in your configurations, easily done via [Consul-Template](https://github.com/hashicorp/consul-template). The default ContainerPilot configuration talks to Consul and assumes the IP address to access consule is passed to the container in an envrionment varible, $CONSUL
