@@ -3,8 +3,6 @@
 
 [![DockerPulls](https://img.shields.io/docker/pulls/autopilotpattern/memcached.svg)](https://registry.hub.docker.com/u/autopilotpattern/memcached/)
 [![DockerStars](https://img.shields.io/docker/stars/autopilotpattern/memcached.svg)](https://registry.hub.docker.com/u/autopilotpattern/memcached/)
-[![MicroBadger version](https://images.microbadger.com/badges/version/autopilotpattern/memcached.svg)](http://microbadger.com/#/images/autopilotpattern/memcached)
-[![MicroBadger commit](https://images.microbadger.com/badges/commit/autopilotpattern/memcached.svg)](http://microbadger.com/#/images/autopilotpattern/memcached)
 
 ### Usage
 Include this image in your Docker Compose project, query Consul for it's IP address and use it in your configurations, easily done via [Consul-Template](https://github.com/hashicorp/consul-template). The default ContainerPilot configuration talks to Consul and assumes the IP address to access consule is passed to the container in an envrionment varible, $CONSUL
@@ -32,13 +30,4 @@ $memcached_servers = array(
     {{end}}
 );
 {{ end }}
-```
-
-### Building
-
-This image implements [microbadger.com](https://microbadger.com/#/labels) label schema, but those labels require additional build args:
-
-```
-docker build --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-               --build-arg VCS_REF=`git rev-parse --short HEAD` .
 ```
