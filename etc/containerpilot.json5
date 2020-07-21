@@ -1,0 +1,77 @@
+{
+  consul: 'consul: 8500',
+  jobs: [
+    {
+      name: 'memcached',
+      exec: ['memcached', '-l', '0.0.0.0'],
+      restarts: 'unlimited',
+      health: {
+        exec: ['/usr/local/bin/manage', 'resthealth'
+        ],
+        interval: 10,
+        ttl: 25,
+      },
+      port: 11211,
+    },
+    {
+      name: 'memcached_evictions',
+      exec: ['/usr/local/bin/sensor.sh', 'evictions'
+      ],
+      timeout: '5s',
+      when: {
+        interval: '5s',
+      },
+    },
+    {
+      name: 'memcached_sys_memory_percent',
+      exec: ['/usr/local/bin/sensor.sh', 'sys_memory'
+      ],
+      timeout: '5s',
+      when: {
+        interval: '5s',
+      },
+    },
+    {
+      name: 'memcached_sys_cpu_load',
+      exec: ['/usr/local/bin/sensor.sh', 'sys_cpu'
+      ],
+      timeout: '5s',
+      when: {
+        interval: '5s',
+      },
+    },
+  ],
+  telemetry: {
+    port: 9090,
+    interfaces: ['eth1', 'eth0', 'eth0[
+        1
+      ]', 'lo', 'lo0', 'inet'
+    ],
+    tags: [
+      "memcached"
+    ],
+    metrics: [
+      {
+        namespace: "memcached",
+        subsystem: "",
+        name: "evictions",
+        help: "count of keys evicted due to memory exhaustion",
+        type: "gauge",
+      },
+      {
+        namespace: "memcached",
+        subsystem: "sys",
+        name: "memory_percent",
+        help: "percentage of memory used",
+        type: "gauge",
+      },
+      {
+        namespace: "memcached",
+        subsystem: "sys",
+        name: "cpu_load",
+        help: "cpu load",
+        type: "gauge",
+      },
+    ],
+  },
+}
